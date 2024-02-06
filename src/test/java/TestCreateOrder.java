@@ -9,14 +9,14 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(Parameterized.class)
-public class TestCreateOrder {
+public class TestCreateOrder extends BaseURI {
     private static final String ORDER_ENDPOINT = "/api/v1/orders";
     private static final String CANCEL_ENDPOINT = "/api/v1/orders/cancel";
     int track;
-    private String[] color;
+    private String[] selectColor;
 
-    public TestCreateOrder(String[] color) {
-        this.color = color;
+    public TestCreateOrder(String[] selectColor) {
+        this.selectColor = selectColor;
     }
 
     @Parameterized.Parameters
@@ -29,12 +29,12 @@ public class TestCreateOrder {
         };
     }
     @Before
-    public void setURL() {
-        RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru/";
+    public void setUp() {
+        RestAssured.requestSpecification = requestSpec;
     }
 
     @After
-    public void deleteCourier() {
+    public void cancelOrder() {
         given()
                 .header("Content-type", "application/json")
                 .when()
@@ -44,7 +44,7 @@ public class TestCreateOrder {
     @Test
     public void testOrderCreation() {
         // Описываем тело запроса
-        String createOrder = "{\"firstname\":\"Анна\",\"lastname\":\"Шакина\",\"address\":\"Линия, 142\",\"metrostation\":4,\"phone\":\"+7 900 355 35 35\",\"renttime\":5,\"deliverydate\":\"2020-06-06\",\"comment\":\"saske, come back to konoha\",\"color\":[\"" + color + "\"]}";
+        Order createOrder = new Order("Анна","Шакина","Линия, 142", 4,"+7 900 355 35 35",5,"2020-06-06","saske, come back to konoha",selectColor);
         // Отправляем POST-запрос на создание заказа
         Response response = given()
                 .header("Content-type", "application/json")

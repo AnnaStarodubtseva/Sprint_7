@@ -4,12 +4,12 @@ import org.junit.Test;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class TestListOrders {
+public class TestListOrders extends BaseURI {
     private static final String LIST_ORDERS_ENDPOINT = "/api/v1/orders";
 
     @Before
-    public void setURL() {
-        RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru/";
+    public void setUp() {
+        RestAssured.requestSpecification = requestSpec;
     }
 
     @Test
