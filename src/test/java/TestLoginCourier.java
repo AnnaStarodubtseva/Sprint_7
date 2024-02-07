@@ -3,27 +3,22 @@ import io.restassured.RestAssured;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class TestLoginCourier extends BaseURI {
-    private static final String DELETE_ENDPOINT = "/api/v1/courier/id";
     int idCourier;
     CreateCourier createCourier = new CreateCourier();
     LoginCourier loginCourier = new LoginCourier();
+    DeleteCourier deleteCourier = new DeleteCourier();
 
     @Before
     public void setUp() {
         RestAssured.requestSpecification = requestSpec;
     }
-
     @After
     public void deleteCourier() {
-        given()
-                .header("Content-type", "application/json")
-                .when()
-                .delete(DELETE_ENDPOINT.replace("id", String.valueOf(idCourier)));
+        deleteCourier.deleteCourier(idCourier);
     }
     @Test
     public void checkPositiveLoginCourier() { testSuccessfulLogin(); }
